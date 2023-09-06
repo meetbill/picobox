@@ -14,6 +14,16 @@ from . import _scopes
 # API reference (see docs).
 class _unset:
     def __repr__(self):
+        """
+        返回一个未设置的字符串。
+
+        Args:
+            无参。
+
+        Returns:
+            str: 未设置的字符串，即"<unset>"。
+
+        """
         return "<unset>"
 
 
@@ -48,6 +58,17 @@ class Box:
     """
 
     def __init__(self):
+        """初始化函数，创建属性和锁对象。
+
+            Args:
+                无参数。
+
+            Returns:
+                无返回值。
+
+            Raises:
+                无异常抛出。
+        """
         self._store = {}
         self._scope_instances = {}
         self._lock = threading.RLock()
@@ -90,9 +111,10 @@ class Box:
         # its nature.
         if value is not _unset:
 
-            def factory():
+            def _factory():
                 return value
 
+            factory = _factory
             scope = _scopes.singleton
 
         # If scope is not explicitly passed, Box assumes "No Scope"
@@ -237,6 +259,16 @@ class ChainBox(Box):
     """
 
     def __init__(self, *boxes: Box):
+        """
+        初始化函数，用于创建多个盒子对象。
+
+        Args:
+            *boxes: 待初始化的盒子对象列表，可以传入任意数量的Box对象。
+
+        Returns:
+            None
+
+        """
         self._boxes = boxes or (Box(),)
 
     def put(

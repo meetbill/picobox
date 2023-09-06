@@ -9,6 +9,17 @@ from ._box import Box, ChainBox
 
 
 def _copy_signature(method, instance=None):
+    """
+    将给定的方法复制为一个新的函数，并保留其文档字符串、名称和其他有用的属性。
+    
+    Args:
+        method (function): 需要复制的方法。
+        instance (object): 调用该方法的实例对象。默认值为 None。
+    
+    Returns:
+        function: 返回一个新的函数，与输入参数相同。
+    
+    """
     # This is a workaround to overcome 'sphinx.ext.autodoc' inability to
     # retrieve a docstring of a bound method. Here's the trick - we create
     # a partial function, and autodoc can deal with partially applied
@@ -94,6 +105,19 @@ class Stack:
     """
 
     def __init__(self, name: t.Text = None):
+        """
+        初始化函数，用于创建一个名为`name`的Box实例。
+        
+        Args:
+            name (str, optional): 实例的名称，默认为None。
+        
+        Attributes:
+            _name (str): 存储实例名称的私有属性。
+            _stack (list[dict]): 存储实例堆栈的私有属性。
+            _lock (threading.Lock): 线程锁定对象，用于保护实例堆栈的安全访问。
+            _topbox (_StackProxy): 代理对象，用于代理当前堆栈顶部的Box实例的所有操作。
+        
+        """
         self._name = name
         self._stack = []
         self._lock = threading.Lock()
@@ -108,6 +132,15 @@ class Stack:
         )
 
     def __repr__(self):
+        """返回一个字符串，表示该对象。
+        
+        Args:
+            无参数。
+        
+        Returns:
+            str: 表示当前对象的字符串。
+        
+        """
         name = self._name
         if not self._name:
             name = "0x%x" % id(self)
